@@ -1,12 +1,22 @@
+#pico2022 #cryptography 
+
+## Challenge:
+```md
+Smash the stack Let's start off simple, can you overflow the correct buffer? The program is available [here](https://artifacts.picoctf.net/c/520/vuln). You can view source [here](https://artifacts.picoctf.net/c/520/vuln.c). And connect with it using: `nc saturn.picoctf.net 53935`
+```
+
+## Process:
 First step: *wget*
 ```bash
 wget -q https://artifacts.picoctf.net/c/534/leak.tar
 ```
+#wget 
 
-Then to untar the file.
+Then to untar the file:
 ```bash
 tar -xf leak.tar
 ```
+#tar
 
 This gives me a directory *leak* which contains two files:
 - usernames.txt
@@ -38,6 +48,7 @@ with open("leak/passwords.txt", 'r') as passwords:
 
     print(flag)
 ```
+#python 
 
 Which gives me: *cvpbPGS{P7e1S_54I35_71Z3}*
 
@@ -49,10 +60,12 @@ So seeing this I tried a *ROT-13* cipher on it to see if it would give me the de
 
     print(flag)
 ```
+#python 
 
 Running this gave me the flag. So next is to output this to a flag.txt file.
 ```bash
 python leak.py > flag.txt
 ```
+#python 
 
 **Flag: *picoCTF{C7r1F_54V35_71M3}***
