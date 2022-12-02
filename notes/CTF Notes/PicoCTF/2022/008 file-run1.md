@@ -23,7 +23,7 @@ Step 3: Run the program
 ./run
 ```
 
-This results in:
+Result:
 ```
 The flag is: picoCTF{U51N6_Y0Ur_F1r57_F113_9bc52b6b}
 ```

@@ -6,7 +6,7 @@ We found this weird message being passed around on the servers, we think we have
 ```
 
 ## Process:
-First step was to wget the message.txt.
+First step was to *wget* the *message.txt*.
 ```bash
 wget -q https://artifacts.picoctf.net/c/393/message.txt
 ```
@@ -38,6 +38,6 @@ python mod1.py > flag.txt
 ```
 #python 
 
-Which outputted the flag to the flag.txt file.
+Which outputted the flag to the *flag.txt* file.
 
 **Flag: *picoCTF{r0und_n_r0und_79c18fb3}***

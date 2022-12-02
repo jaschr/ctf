@@ -30,8 +30,11 @@ sudo apt install gdb
 ```
 #sudo #apt #gdb
 
+
+Here's the commands then entered:
 ```bash
 gdb gdbme
+
 layout asm
 break \*(main+99)
 run

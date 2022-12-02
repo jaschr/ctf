@@ -6,19 +6,19 @@ A new modular challenge! Download the message [here](https://artifacts.picoctf.n
 ```
 
 ## Process:
-First step was to wget the file.
+First step was to *wget* the file.
 ```bash
 wget -q https://artifacts.picoctf.net/c/499/message.txt
 ```
 #wget
 
-Next was to copy the mod1.py from [[002 basic-mod1]] to the new folder.
+Next was to copy the *mod1.py* from [[002 basic-mod1]] to the new folder.
 ```bash
 cp ../002_basic-mod1/mod1.py mod2.py
 ```
 #cp
 
-After this I edited the mod2.py file to work with the new modulo.
+After this I edited the *mod2.py* file to work with the new modulo.
 ```python
 #!/usr/bin/env python
 

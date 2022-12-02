@@ -13,7 +13,7 @@ Step 2: Simply inspect the HTML source. This contained a comment:
 <!--picoCTF{1n5p3t0r_0f_h7ml_1fd8425b}-->
 ```
 
-And that's the flag.
+And there's the flag. So to put it in a *flag.txt* file:
 ```bash
 echo "picoCTF{1n5p3t0r_0f_h7ml_1fd8425b}" > flag.txt
 ```

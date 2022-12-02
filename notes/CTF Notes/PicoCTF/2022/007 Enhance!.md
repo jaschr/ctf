@@ -8,7 +8,7 @@ Download this image file and find the flag.
 ```
 
 ## Process:
-First thing I did was wget the file.
+First thing I did was *wget* the file.
 ```bash
 wget -q https://artifacts.picoctf.net/c/136/drawing.flag.svg
 ```

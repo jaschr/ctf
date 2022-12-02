@@ -13,7 +13,7 @@ Looking at the *style.css* I see this comment:
 /* picoCTF{1nclu51v17y_1of2_ *
 ```
 
-And looking at the *script.js*:
+And looking at the *script.js* I see another comment:
 ```js
 // f7w_2of2_df589022}
 ```

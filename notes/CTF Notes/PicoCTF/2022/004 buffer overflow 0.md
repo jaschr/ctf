@@ -25,7 +25,7 @@ chmod +x vuln
 ```
 #chmod
 
-Running the vuln program resulted in:
+Running the *vuln* program resulted in:
 	Please create 'flag.txt' in this directory with your own debugging flag.Please create 'flag.txt' in this directory with your own debugging flag.
 
 After this I decided to take a look at the vuln.c file.

@@ -253,6 +253,7 @@ lz4 -d flag.lz4
 ```
 #lz4 
 
+Now keep repeating the process...
 ```bash
 cat flag
 ```

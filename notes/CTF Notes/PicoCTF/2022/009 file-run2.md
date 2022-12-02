@@ -18,7 +18,7 @@ Running this program and passing *Hello!*:
 ./run Hello!
 ```
 
-Results in:
+Results with:
 ```
 The flag is: picoCTF{F1r57_4rgum3n7_be0714da}
 ```

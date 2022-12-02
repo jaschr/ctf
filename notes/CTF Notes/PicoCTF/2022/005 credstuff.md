@@ -12,7 +12,7 @@ wget -q https://artifacts.picoctf.net/c/534/leak.tar
 ```
 #wget 
 
-Then to untar the file:
+Then *untar* the file:
 ```bash
 tar -xf leak.tar
 ```
