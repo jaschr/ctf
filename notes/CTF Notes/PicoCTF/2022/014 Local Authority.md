@@ -1,0 +1,39 @@
+#pico2022 #webexploitation 
+
+## Challenge:
+```md
+Can you get the flag? Go to this [website](http://saturn.picoctf.net:49699/) and see what you can discover.
+```
+
+## Process:
+First thing is to go to the [website](http://saturn.picoctf.net:49699/).
+
+Looking at the files I see a *login.php*.
+
+I navigate to [http://saturn.picoctf.net:49699/login.php](http://saturn.picoctf.net:49699/login.php) and in the inspector under sources see *secure.js*.
+
+Looking at *secure.js* I see:
+```js
+function checkPassword(username, password)
+{
+  if( username === 'admin' && password === 'strongPassword098765' )
+  {
+    return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+```
+#javascript 
+
+From here I see the username is *admin* and password is *strongPassword098765*. Using this I log into the site and recieve the flag.
+
+And I *echo* the flag into *flag.txt*.
+```bash
+echo "picoCTF{j5_15_7r4n5p4r3n7_05df90c8}" > flag.txt
+```
+#echo 
+
+**Flag: *picoCTF{j5_15_7r4n5p4r3n7_05df90c8}***
