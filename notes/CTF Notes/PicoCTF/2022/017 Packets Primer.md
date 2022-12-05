@@ -20,7 +20,7 @@ sudo apt install wireshark
 ```
 #sudo #apt #wireshark
 
-I first tried *strings* on the file. Which gave me the flag. I am going to ignore this and continue to try to get some experience with *wireshark*.
+I first tried *strings* on the file. Which gave me the flag. 
 ```bash
 strings network-dump.flag.pcap
 ```
@@ -35,11 +35,14 @@ p i c o C T F { p 4 c k 3 7 _ 5 h 4 r k _ c e c c a a 7 f }
 ```bash
 strings network-dump.flag.pcap | grep "p i c o" | tr -d ' ' > flag.txt
 ```
+#strings #grep #tr 
 
 ```
 picoCTF{p4ck37_5h4rk_ceccaa7f}
 ```
 #strings #grep #tr 
+
+I am going to ignore this and continue to try to get some experience with *wireshark*.
 
 So after installing *wireshark* I boot it up and...
 - File > Open and I open the *pcap* file.

@@ -29,5 +29,6 @@ And would you look at that.
 ```bash
 echo "picoCTF{C4n_Y0u_S33_m3_fully}" > flag.txt
 ```
+#echo 
 
 **Flag: picoCTF{C4n_Y0u_S33_m3_fully}***

@@ -23,7 +23,7 @@ print("Welcome back... your flag, user:")
 decryption = str_xor(flag_enc.decode(), "utilitarian")
 print(decryption)
 ```
-#pyth 
+#python 
 
 So I change it to in *password.py*:
 ```python
@@ -68,6 +68,7 @@ And now re-running the program and entering *password* for the password gives us
 ```bash
 python patchme.flag.py
 ```
+#python 
 
 ```
 Please enter correct password for flag: password
