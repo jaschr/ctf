@@ -10,6 +10,7 @@ Download the file.
 ```bash
 curl -O https://artifacts.picoctf.net/c/464/unpackme.flag.py
 ```
+#curl
 
 Open the *python* script in *vim*.
 ```python
