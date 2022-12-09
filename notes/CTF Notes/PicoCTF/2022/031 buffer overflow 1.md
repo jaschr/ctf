@@ -284,6 +284,7 @@ Running this:
 ```bash
 python exploit.py saturn.picoctf.net 50196
 ```
+#python 
 
 Returns:
 ```
@@ -295,5 +296,6 @@ And that's the flag.
 ```bash
 echo "picoCTF{addr3ss3s_ar3_3asy_ad2f467b}" > flag.txt
 ```
+#echo 
 
 **Flag: *picoCTF{addr3ss3s_ar3_3asy_ad2f467b}***
