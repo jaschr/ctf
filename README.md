@@ -6,7 +6,7 @@
 
 **Goal**
 
-Complete all challenges: [44/50]
+Complete all challenges: [44/65]
 
 #43 is **UNDER MAINTENANCE** and not yet completed! Will go back if it is fixed.
 
