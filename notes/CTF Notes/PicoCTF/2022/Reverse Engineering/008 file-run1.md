@@ -6,13 +6,13 @@ A program has been provided to you, what happens if you try to run it on the com
 ```
 
 ## Process:
-Step 1: *wget*
+Step 1: ```wget```
 ```bash
 wget -q https://artifacts.picoctf.net/c/308/run
 ```
 #wget 
 
-Step 2: *chmod*
+Step 2: ```chmod```
 ```bash
 chmod +x run
 ```

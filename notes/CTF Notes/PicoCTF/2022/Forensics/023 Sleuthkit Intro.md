@@ -9,7 +9,7 @@ Download the disk image and use `mmls` on it to find the size of the Linux parti
 ```
 
 ## Process:
-Start with *wget*.
+Start with ```wget```.
 ```bash
 wget -q https://artifacts.picoctf.net/c/114/disk.img.gz
 ```
@@ -21,13 +21,13 @@ sudo apt install sleuthkit
 ```
 #sudo #apt #sleuthkit
 
-Unzip the file with *gzip*.
+Unzip the file with ```gzip```.
 ```bash
 gzip -d disk.img.gz
 ```
 #gzip #gz 
 
-Then use *mmls* from *sleuthkit*.
+Then use ```mmls``` from *sleuthkit*.
 ```bash
 mmls disk.img
 ```

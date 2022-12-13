@@ -6,13 +6,13 @@ Morse code is well known. Can you decrypt this? Download the file [here](https:/
 ```
 
 ## Process:
-Start by using *wget* the  get the file.
+Start by using ```wget``` the  get the file.
 ```bash
 wget -q https://artifacts.picoctf.net/c/235/morse_chal.wav
 ```
 #wget 
 
-And I used *aplay* to play the file within the terminal.
+And I used ```aplay``` to play the file within the terminal.
 ```bash
 aplay morse_chal.wav
 ```

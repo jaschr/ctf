@@ -6,7 +6,8 @@ We found this weird message being passed around on the servers, we think we have
 ```
 
 ## Process:
-First step was to *wget* the *message.txt*.
+First step was to ```
+wget``` the *message.txt*.
 ```bash
 wget -q https://artifacts.picoctf.net/c/393/message.txt
 ```
@@ -15,7 +16,7 @@ wget -q https://artifacts.picoctf.net/c/393/message.txt
 The challenge states:
 	Take each number mod 37 and map it to the following character set: 0-25 is the alphabet (uppercase), 26-35 are the decimal digits, and 36 is an underscore.
 
-So to do this I created a python script.
+So to do this I created a *python* script.
 ```python
 #!/usr/bin/env python
 
@@ -32,7 +33,7 @@ print(flag + "}")
 ```
 #python 
 
-Then I ran...
+Then I ran:
 ```bash
 python mod1.py > flag.txt
 ```

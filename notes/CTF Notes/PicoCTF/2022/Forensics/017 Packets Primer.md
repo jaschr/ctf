@@ -8,7 +8,7 @@ Download the packet capture file and use packet analysis software to find the fl
 ```
 
 ## Process:
-I first *wget* the packet capture file.
+I first ```wget``` the packet capture file.
 ```bash
 wget -q https://artifacts.picoctf.net/c/199/network-dump.flag.pcap
 ```
@@ -20,7 +20,7 @@ sudo apt install wireshark
 ```
 #sudo #apt #wireshark
 
-I first tried *strings* on the file. Which gave me the flag. 
+I first tried ```strings``` on the file. Which gave me the flag. 
 ```bash
 strings network-dump.flag.pcap
 ```

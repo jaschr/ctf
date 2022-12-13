@@ -6,7 +6,7 @@ Smash the stack Let's start off simple, can you overflow the correct buffer? The
 ```
 
 ## Process:
-First step: *wget*
+First step: ```wget``` 
 ```bash
 wget -q https://artifacts.picoctf.net/c/534/leak.tar
 ```
@@ -26,8 +26,7 @@ The index of the username aligns with the index of the password.
 
 I could have looked up what line the username was on and then do the same in the password file, but that didn't seem as fun.
 
-So I wrote a python script.
-
+So I wrote a *python* script.
 ```python
 #!/usr/bin/env python
 
@@ -52,7 +51,7 @@ with open("leak/passwords.txt", 'r') as passwords:
 
 Which gives me: *cvpbPGS{P7e1S_54I35_71Z3}*
 
-So seeing this I tried a *ROT-13* cipher on it to see if it would give me the decrypted flag. I changed up the python script slightly.
+So seeing this I tried a *ROT-13* cipher on it to see if it would give me the decrypted flag. I changed up the *python* script slightly.
 ```python
     flag_encrypted = all_lines[pass_index]
 
@@ -62,7 +61,7 @@ So seeing this I tried a *ROT-13* cipher on it to see if it would give me the de
 ```
 #python 
 
-Running this gave me the flag. So next is to output this to a flag.txt file.
+Running this gave me the flag. So next is to output this to a *flag.txt* file.
 ```bash
 python leak.py > flag.txt
 ```

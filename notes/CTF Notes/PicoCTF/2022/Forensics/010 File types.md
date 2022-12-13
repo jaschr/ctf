@@ -6,7 +6,7 @@ This file was found among some files marked confidential but my pdf reader canno
 ```
 
 ## Process:
-Step 1: *wget*
+Step 1: ```wget```
 ```bash
 wget -q https://artifacts.picoctf.net/c/323/Flag.pdf
 ```
@@ -59,7 +59,7 @@ mv flag flag.ar
 ```
 #mv 
 
-Then using *ar* to extract the file:
+Then using ```ar``` to extract the file:
 ```bash
 ar -x flag.ar
 ```
@@ -97,7 +97,7 @@ mv flag flag.cpio
 ```
 #mv 
 
-And run *cpio* with the flags *-i* and *-d*. *-i* is for *extract* and *-d* will *create leading directories where necessary*.
+And run *cpio* with the flags ```-i``` and ```-d```. ```-i``` is for *extract* and ```-d``` will *create leading directories where necessary*.
 ```bash
 cpio -id < flag.cpio
 ```
@@ -117,7 +117,7 @@ i�h� ѣ##'SGzѨrш@4�hb0C@1F}ѦM4�
 Z3�#Ŏ.�!,
 ```
 
-Run *file*
+Run ```file```
 ```bash
 file flag
 ```
@@ -133,7 +133,7 @@ mv flag flag.bz2
 ```
 #mv
 
-And extract with *bzip2*. The *-d* flag means *decompress*.
+And extract with ```bzip2```. The ```-d``` flag means *decompress*.
 ```bash
 bzip2 -d flag.bz2
 ```
@@ -151,7 +151,7 @@ cat flag
 NjNy5i({j�©D��Q/�U��w8�>4Ԥit3h.m%�(��vFi|BMW�iSnqy[]gp?c'�}z{$�c^�I3�jI
 ```
 
-Try *file* again...
+Try ```file``` again...
 ```bash
 file flag
 ```
@@ -167,7 +167,7 @@ mv flag flag.gz
 ```
 #mv 
 
-Now with *gzip*.
+Now with ```gzip```.
 ```bash
 gzip -d flag.gz
 ```
@@ -185,7 +185,7 @@ LZIP
 NjNy5i({j�©D��Q/�U��w8�>4Ԥit3h.m%�(��vFi|BMW�iSnqy[]gp?c'�}z{$�c^�I
 ```
 
-Run *file*
+Run ```file```
 ```bash
 file flag
 ```
@@ -201,7 +201,7 @@ mv flag flag.lzip
 ```
 #mv 
 
-And run *lzip*. (And install *lzip*)
+And run ```lzip```. (And install ```lzip```)
 ```bash
 sudo apt install lzip
 ```
@@ -225,7 +225,7 @@ cat flag.lzip.out
 ,)!	*��~ζ"'�/.�$�E�~UY�]+̙
 ```
 
-Run *file*
+Run ```file```.
 ```bash
 file flag.lzip.out
 ```
@@ -241,13 +241,13 @@ mv flag.lzip.out flag.lz4
 ```
 #mv 
 
-Install *lz4*...
+Install ```lz4```...
 ```bash
 sudo apt install lz4
 ```
 #sudo #apt #lz4 
 
-Run *lz4*
+Run ```lz4```.
 ```bash
 lz4 -d flag.lz4
 ```

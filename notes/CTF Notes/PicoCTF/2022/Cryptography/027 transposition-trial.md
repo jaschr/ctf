@@ -6,7 +6,7 @@ Our data got corrupted on the way here. Luckily, nothing got replaced, but every
 ```
 
 ## Process:
-Using *curl* again.
+Using ```curl``` again.
 ```bash
 curl -O https://artifacts.picoctf.net/c/456/message.txt
 ```

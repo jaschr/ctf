@@ -6,7 +6,7 @@ Now you DON’T see me. This [report](https://artifacts.picoctf.net/c/264/Financ
 ```
 
 ## Process:
-First: *wget*.
+First: ```wget```.
 ```bash
 wget -q https://artifacts.picoctf.net/c/264/Financial_Report_for_ABC_Labs.pdf
 ```

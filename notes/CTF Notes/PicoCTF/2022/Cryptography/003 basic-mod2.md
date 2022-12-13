@@ -6,7 +6,7 @@ A new modular challenge! Download the message [here](https://artifacts.picoctf.n
 ```
 
 ## Process:
-First step was to *wget* the file.
+First step was to ```wget``` the file.
 ```bash
 wget -q https://artifacts.picoctf.net/c/499/message.txt
 ```

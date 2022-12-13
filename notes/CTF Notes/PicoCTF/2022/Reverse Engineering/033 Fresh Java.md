@@ -13,6 +13,11 @@ sudo apt install procyon-decompiler
 #sudo #apt #procyon
 
 Decompile the java.
+```bash
+procyon KeygenMe.class
+```
+#procyon 
+
 ```java
 import java.util.Scanner;
 

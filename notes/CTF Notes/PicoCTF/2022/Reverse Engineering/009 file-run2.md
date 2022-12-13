@@ -6,7 +6,7 @@ Another program, but this time, it seems to want some input. What happens if you
 ```
 
 ## Process:
-Start with *wget* and *chmod*.
+Start with ```wget``` and ```chmod```.
 ```bash
 wget -q https://artifacts.picoctf.net/c/351/run
 chmod +x run

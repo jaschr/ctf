@@ -6,7 +6,7 @@ A message has come in but it seems to be all scrambled. Luckily it seems to have
 ```
 
 ## Process:
-Using *curl* this time.
+Using ```curl``` this time.
 ```bash
 curl https://artifacts.picoctf.net/c/379/message.txt -o message.txt
 ```

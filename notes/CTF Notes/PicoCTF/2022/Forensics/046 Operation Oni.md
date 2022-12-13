@@ -26,7 +26,7 @@ gzip -d disk.img.gz
 ```
 #gz #gzip 
 
-I ran *mmls*.
+I ran ```mmls```.
 ![[046_Operation_Oni-0.png]]
 #mmls 
 
@@ -100,7 +100,7 @@ ssh -i key_file -p 62501 ctf-player@saturn.picoctf.net
 ```
 #ssh
 
-And then just *ls* to see the files. Then *cat* the *flag.txt* file to get the flag.
+And then just ```ls``` to see the files. Then ```cat``` the *flag.txt* file to get the flag.
 ![[046_Operation_Oni-2.png]]
 #ls #cat 
 

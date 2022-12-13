@@ -6,7 +6,7 @@ A type of transposition cipher is the rail fence cipher, which is described [her
 ```
 
 ## Process:
-Open the [link](https://en.wikipedia.org/wiki/Rail_fence_cipher) and *wget* the file.
+Open the [link](https://en.wikipedia.org/wiki/Rail_fence_cipher) and ```wget``` the file.
 ```bash
 wget -q https://artifacts.picoctf.net/c/272/message.txt
 ```

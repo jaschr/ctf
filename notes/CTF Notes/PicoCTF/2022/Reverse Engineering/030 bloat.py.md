@@ -58,7 +58,7 @@ sys.exit(0)
 ```
 #python 
 
-Here *arg123()* reads the encrypted text and gets set to variable *arg444*.
+Here **arg123()** reads the encrypted text and gets set to variable *arg444*.
 ```python
 ...
 def arg132():
@@ -69,7 +69,7 @@ arg444 = arg132()
 ```
 #python 
 
-The function *arg111* recieves an argument of *arg444* (the flag file) and uses *arg122()* to decode.
+The function *arg111* recieves an argument of *arg444* (the flag file) and uses **arg122()** to decode.
 
 So we can call:
 ```python

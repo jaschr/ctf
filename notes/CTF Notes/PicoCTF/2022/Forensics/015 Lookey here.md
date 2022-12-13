@@ -6,7 +6,7 @@ Attackers have hidden information in a very large mass of data in the past, mayb
 ```
 
 ## Process:
-First is to *wget* the file.
+First is to ```wget``` the file.
 ```bash
 wget -q https://artifacts.picoctf.net/c/294/anthem.flag.txt
 ```
@@ -23,7 +23,7 @@ Then I searched the file to match the start of the flag.
 :%s/pico
 ```
 
-Which gave me the flag. I *echoed* this into a flag file.
+Which gave me the flag. I ```echo``` this into a *flag.txt* file.
 ```bash
 echo "picoCTF{gr3p_15_@w3s0m3_4c479940}" > flag.txt
 ```

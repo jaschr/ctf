@@ -6,14 +6,14 @@ Can you get the flag? Run this [Python program](https://artifacts.picoctf.net/c/
 ```
 
 ## Process:
-*Wget* both files.
+```wget``` both files.
 ```bash
 wget -q https://artifacts.picoctf.net/c/386/patchme.flag.py
 wget -q https://artifacts.picoctf.net/c/386/flag.txt.enc
 ```
 #wget 
 
-Opening the python file I see:
+Opening the *python* file I see:
 ```python
 if( user_pw == "ak98" + \
   "-=90" + \
@@ -38,7 +38,7 @@ print("ak98" + \
 ak98-=90adfjhgj321sleuth9000
 ```
 
-And so I use this as the password after running the given python file.
+And so I use this as the password after running the given *python* file.
 ```bash
 python patchme.flag.py
 ```
@@ -48,7 +48,7 @@ python patchme.flag.py
 Please enter correct password for flag: ak98-=90adfjhgj321sleuth9000
 ```
 
-Which outputs the flag. *Echo* it.
+Which outputs the flag. ```echo``` it.
 ```bash
 echo "picoCTF{p47ch1ng_l1f3_h4ck_c4a4688b}" > flag.txt
 ```

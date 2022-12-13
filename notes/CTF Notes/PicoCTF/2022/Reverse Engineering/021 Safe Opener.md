@@ -6,7 +6,7 @@ Can you open this safe? I forgot the key to my safe but this [program](https://a
 ```
 
 ## Process:
-I first *wget* the file.
+I first ```wget``` the file.
 ```bash
 wget -q https://artifacts.picoctf.net/c/463/SafeOpener.java
 ```

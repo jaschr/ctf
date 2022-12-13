@@ -13,7 +13,7 @@ Can you get the flag? Download this [binary](https://artifacts.picoctf.net/c/115
 ```
 
 ## Process:
-Step 1: *wget* the file.
+Step 1: ```wget``` the file.
 ```bash
 wget -q https://artifacts.picoctf.net/c/115/gdbme
 ```
@@ -25,6 +25,7 @@ chmod +x gbdme
 ```
 #chmod 
 
+Step 3: Install ```gdb```.
 ```bash
 sudo apt install gdb
 ```

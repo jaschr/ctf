@@ -6,7 +6,7 @@ It seems that another encrypted message has been intercepted. The encryptor seem
 ```
 
 ## Process:
-First I *curl* the file.
+First I ```curl``` the file.
 ```bash
 curl https://artifacts.picoctf.net/c/107/message.txt -o message.txt
 ```
