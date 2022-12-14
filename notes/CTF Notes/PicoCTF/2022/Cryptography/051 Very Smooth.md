@@ -137,67 +137,54 @@ cd ~/tools/RsaCtfTool
 python RsaCtfTool.py -n 0x6df1b3e09c344f8cf16c6fd9bdcc140e7c7c44c1ffd9c8439aa28599bf4f5691ab107314d51194dff5b3b6dcfd84d03e8067eee1bc2554f10ecae55beb6b4f7406b1a76790e30f1a5688edf773f0dfb65477270054fedf94f21bfabaa5781200974a5c7fa1c863fccf8689a8a13302d1a861f82c678604a73400b4ab1532eec5472c56720fbe336e24a7e855a5b46a8a7b64224c8be263fef1c8eb263f6e6690a41648077aa6629956f719bb4150e411d6d1e04d61347710596f988d91dcf306e44688f1919f860c56508d1079f994cd45e0d8305ea1d2211d1579a2c90e6bf155672a4d893e981f579b4942af50ed2ce18bcb3625b16a4cf9d2b7cf195f1f85 --uncipher 0x527d16b8a5e8a99a8138331b94ef1f8bed77fcdc27c4a664ef7495b72ea90a26c9a17e3d62db612fb8176a9ae8687f8c16b43c0fe279837b8e63aac96b8b170aa5e24a852c1ae60bb948e15c60155672ac6c8d0d789e4bb186102c4b8aebf1b88acb250da8ed7c6dc244c44b8ec458ca55d09884ab8db3bbc544e3cacab7a6eb8fbe6c267cc496317a4fbe6dbb32681211c1ffb0b5da4e84035306ff4abd7c53e5f6247073bbf5d656a2d700263bee67c43d1c8c842e631fde93aefae78b09bd62239620b80e0caa0d43b5e7a779bbaae669b14d9da819f1707619e12604c92641a64519275a8ba824d4c90e088708b59cb8ee8ce3729e1f3b6eb6359cb706ad -e 0x1001
 ```
 
-This tool was currently broken, so let's do some scripting. The source of this script can be found [here](https://ctftime.org/writeup/32914). I did not write this script. I do though understand it. I was just feeling a bit lazy after trying to get *RsaCtfTool* working.
+This tool was currently broken, so let's do some scripting. 
 ```python
-from gmpy2 import fac
-from math import gcd
+#!/usr/bin/env python3
+
 from Crypto.Util.number import *
-from sympy import true
+from math import gcd
 
 n = 0x6df1b3e09c344f8cf16c6fd9bdcc140e7c7c44c1ffd9c8439aa28599bf4f5691ab107314d51194dff5b3b6dcfd84d03e8067eee1bc2554f10ecae55beb6b4f7406b1a76790e30f1a5688edf773f0dfb65477270054fedf94f21bfabaa5781200974a5c7fa1c863fccf8689a8a13302d1a861f82c678604a73400b4ab1532eec5472c56720fbe336e24a7e855a5b46a8a7b64224c8be263fef1c8eb263f6e6690a41648077aa6629956f719bb4150e411d6d1e04d61347710596f988d91dcf306e44688f1919f860c56508d1079f994cd45e0d8305ea1d2211d1579a2c90e6bf155672a4d893e981f579b4942af50ed2ce18bcb3625b16a4cf9d2b7cf195f1f85
 c = 0x527d16b8a5e8a99a8138331b94ef1f8bed77fcdc27c4a664ef7495b72ea90a26c9a17e3d62db612fb8176a9ae8687f8c16b43c0fe279837b8e63aac96b8b170aa5e24a852c1ae60bb948e15c60155672ac6c8d0d789e4bb186102c4b8aebf1b88acb250da8ed7c6dc244c44b8ec458ca55d09884ab8db3bbc544e3cacab7a6eb8fbe6c267cc496317a4fbe6dbb32681211c1ffb0b5da4e84035306ff4abd7c53e5f6247073bbf5d656a2d700263bee67c43d1c8c842e631fde93aefae78b09bd62239620b80e0caa0d43b5e7a779bbaae669b14d9da819f1707619e12604c92641a64519275a8ba824d4c90e088708b59cb8ee8ce3729e1f3b6eb6359cb706ad
+e = 0x10001
 
-a = 2
-B = 65535
 
-while True:
+def pollard(n):
+    a = 2
+    b = 2
 
-    b = fac(B)
+    while True:
+        a = pow(a, b, n)
+        g = gcd(a-1, n)
+        if 1 < g < n:
+            return g
+        else:
+            b += 1
 
-    tmp1 = n
-    tmp2 = pow(a, b, n) - 1
-    gcd_value = gcd(tmp1, tmp2)
+p = pollard(n)
+q = n // p
 
-    if gcd_value == 1:
-        B += 1
-    elif gcd_value == n:
-        B -= 1
-    else:
-        print(f"[+] p factor : {gcd_value}")
+phi = 1
+for i in [p, q]:
+    phi *= (i-1)
 
-        p = gcd_value
-        q = n // p
-        e = 0x10001
+d = inverse(e, phi)
+m = pow(c, d, n)
 
-        print(f"[+] q factor : {q}")
-
-        phi = (p-1)*(q-1)
-        d = inverse(e, phi)
-
-        m = pow(c, d, n)
-
-        flag = long_to_bytes(m)
-
-        print(flag)
-
-        break
+flag = long_to_bytes(m).decode('utf-8')
+print(flag)
 ```
 #python 
 
+Outputting:
+```
+picoCTF{p0ll4rd_f4ct0r1z4at10n_FTW_148cbc0f}
+```
+
+Save the flag.
 ```bash
-python pollard.py
+python getflag.py > flag.txt
 ```
 #python 
-
-```
-[+] p factor : 119794531222198227816245717995060744163360298294423476452032647421596925980892835125271446000646695620101817823140198296927224898676837439874444402676864929288635491895754803241884932436386363016678872760759109293190627264647432230488255683141474985111053423511663914528554563579148869348108921076939121106079
-[+] q factor : 115858070620203713912115779933036576290870673685958629589636180479908000968696850975393141322319442789202003761249002909617956036412268008134582710673359743269990346469369138671438030903447800728643462194343344679960634789251086623521704718317690426573349791601925376742380095431179562666620590055783473687899
-b'picoCTF{p0ll4rd_f4ct0r1z4at10n_FTW_148cbc0f}'
-```
-
-Giving us our flag!
-```bash
-echo "picoCTF{p0ll4rd_f4ct0r1z4at10n_FTW_148cbc0f}" > flag.txt
-```
 
 **Flag: *picoCTF{p0ll4rd_f4ct0r1z4at10n_FTW_148cbc0f}***
