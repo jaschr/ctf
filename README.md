@@ -6,8 +6,10 @@
 
 **Goal**
 
-Complete all challenges: [50/65]
+Complete all challenges: [51/65]
 
 #43 is **UNDER MAINTENANCE** and not yet completed! Will go back if it is fixed.
 
 *I will try to keep this goal tracking up to date.*
+
+<p style="color: red;">TODO(n0tt): Redo #51 when RsaCtfTool is fixed as well as write my own python script to solve it.</p>
