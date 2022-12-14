@@ -2,7 +2,9 @@
 
 ## PicoCTF
 
-*Disclaimer: There will be spoilers to the flags in this repository!*
+``` diff
+- Disclaimer: There will be spoilers to the flags in this repository!
+```
 
 **Goal**
 
