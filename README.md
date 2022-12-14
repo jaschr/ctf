@@ -13,6 +13,6 @@ Complete all challenges: [51/65]
 *I will try to keep this goal tracking up to date.*
 
 ``` diff
--TODO(n0tt): Redo #51 when RsaCtfTool is fixed as well as write my own python script to solve it.</p>
+! TODO(n0tt): Redo #51 when RsaCtfTool is fixed as well as write my own python script to solve it.
 ```
 
