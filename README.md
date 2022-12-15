@@ -8,7 +8,7 @@
 
 **Goal**
 
-Complete all challenges: [51/65]
+Complete all challenges: [53/65]
 
 #43 is **UNDER MAINTENANCE** and not yet completed! Will go back if it is fixed. Marking as complete until I am able to do.
 
